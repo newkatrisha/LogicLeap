@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "743297246824",
+    "project_id": "logicleap-5cacc",
+    "storage_bucket": "logicleap-5cacc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:743297246824:android:47bb14a07b136a42f67ddd",
+        "android_client_info": {
+          "package_name": "com.andreykh.LogicLeap"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "743297246824-ara3m3od75len84smqalfikdvjnricfo.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.andreykh.LogicLeap",
+            "certificate_hash": "646e7429e5d5867ed988ae601956a2febeb6c12f"
+          }
+        },
+        {
+          "client_id": "743297246824-q93vp45gm393chmeheo4bp9od5go0lte.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.andreykh.LogicLeap",
+            "certificate_hash": "16dfd2ef6279faa6fab892d4f4ad4ded7ae1078c"
+          }
+        },
+        {
+          "client_id": "743297246824-a0gkskaeeoste2ipkhut44rm86ogbs9g.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDHiEZBv5qh4rBPM1j7Wb5gcFFr4_kUWGo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "743297246824-a0gkskaeeoste2ipkhut44rm86ogbs9g.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "743297246824-k5t82js6lt7fjepv42me4r591ps7nm24.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.andreykh.LogicLeap"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
