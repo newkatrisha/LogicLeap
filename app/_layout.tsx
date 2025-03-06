@@ -5,7 +5,7 @@ import { StyleSheet } from "react-native";
 export default function RootLayout() {
   return (
     <UserProvider>
-      <Stack>
+      <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="index" options={{ headerShown: false }} />
       </Stack>
     </UserProvider>

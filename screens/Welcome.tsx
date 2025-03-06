@@ -9,9 +9,10 @@ import {
 } from "react-native";
 import { signInAnonymously } from "firebase/auth";
 import { FIREBASE_AUTH } from "@/firebaseConfig";
-import i18n from "../../locales/localization";
+import i18n from "../locales/localization";
 // import { customEvent } from 'vexo-analytics'
 import { useUser } from "@/contexts/UserContext";
+import { router } from "expo-router";
 
 const WelcomeScreen = () => {
   const { user } = useUser();
@@ -19,7 +20,7 @@ const WelcomeScreen = () => {
 
   useEffect(() => {
     if (user) {
-      //   navigation.replace("Home"); // Navigate immediately if user is found
+      router.replace("/home");
     } else {
       const timer = setTimeout(() => {
         setLoading(false);
@@ -51,7 +52,7 @@ const WelcomeScreen = () => {
   };
 
   const handleLogin = () => {
-    // navigation.navigate("Login");
+    router.push("/(auth)/login");
   };
 
   const renderContent = () => {

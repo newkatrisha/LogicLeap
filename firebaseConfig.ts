@@ -1,8 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
-// import { initializeAuth, browserLocalPersistence } from "firebase/auth";
-// import { Platform } from "react-native";
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: "AIzaSyB6H2L5ui_myWD_6RrWcXZNXN-7qyqvWK8",
@@ -17,7 +15,3 @@ const firebaseConfig = {
 const FIREBASE_APP = initializeApp(firebaseConfig);
 export const FIREBASE_DB = getFirestore(FIREBASE_APP);
 export const FIREBASE_AUTH = getAuth(FIREBASE_APP);
-// export const FIREBASE_AUTH =
-//   Platform.OS === "web"
-//     ? initializeAuth(FIREBASE_APP, { persistence: browserLocalPersistence })
-//     : initializeAuth(FIREBASE_APP);
