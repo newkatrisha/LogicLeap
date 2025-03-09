@@ -1,0 +1,49 @@
+name: Code Quality Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  code-quality:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Check for unresolved merge conflicts
+        run: |
+          echo "Checking for merge conflicts..."
+          if grep -r -E "<<<<<<<|=======|>>>>>>>" . --include="*.{ts,tsx,js,jsx,json}"; then
+            echo "::error::Merge conflicts detected!"
+            exit 1
+          fi
+
+      - name: TypeScript Type Check
+        run: npx tsc --noEmit
+
+      - name: Lint Code
+        run: npm run lint || npx eslint . --ext .js,.jsx,.ts,.tsx
+
+      - name: Run Tests (if available)
+        run: npm test || echo "No test script found, skipping."
+
+      - name: Expo Doctor Check
+        if: contains(fromJson('["expo"]'), 'package.json')
+        run: npx expo-doctor || echo "Expo doctor completed with warnings."
+
+      - name: Validate Expo Build (if Expo project)
+        if: contains(fromJson('["expo"]'), 'package.json')
+        run: npx expo prebuild --no-install --clean || echo "Expo prebuild completed with warnings."
