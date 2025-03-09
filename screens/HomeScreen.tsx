@@ -14,6 +14,7 @@ import {
 // import BottomNavigation from '../components/BottomNavigation'; // Import the BottomNavigation component
 import i18n from "../locales/localization"; // Import localization
 import { useUser } from "@/contexts/UserContext";
+import { UserContextType } from "@/types/user";
 
 const avatars = [
   { id: "default", source: require("@/assets/images/userIcon.png") },
@@ -41,7 +42,7 @@ const getAvatarSource = (id: string) => {
 };
 
 const HomeScreen = () => {
-  const { user, updateNickname, updateAvatar } = useUser();
+  const { user, updateNickname, updateAvatar } = useUser() as UserContextType;
   const [isEditing, setIsEditing] = useState(false);
   const [thankYouMessage, setThankYouMessage] = useState("");
   const [nickname, setNickname] = useState(user?.nickname || "");

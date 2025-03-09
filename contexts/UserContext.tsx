@@ -3,13 +3,14 @@ import { onAuthStateChanged } from "firebase/auth";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { FIREBASE_AUTH, FIREBASE_DB } from "@/firebaseConfig";
+import { User, UserContextType } from "@/types/user";
 
-const UserContext = createContext({});
+const UserContext = createContext<UserContextType>({} as UserContextType);
 
 export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const [testCompleted, setTestCompleted] = useState(false);
 
   const sanitizeUserData = (firebaseUser, additionalData = {}) => {
