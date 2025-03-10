@@ -10,6 +10,7 @@ export interface User {
   purchasedStories: { id: number; name: string }[];
   avatar: string;
   scores?: unknown;
+  testCompleted?: boolean;
 }
 
 export interface UserContextType {

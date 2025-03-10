@@ -9,37 +9,14 @@ import {
   Modal,
   TouchableOpacity,
   FlatList,
+  ImageSourcePropType,
 } from "react-native";
 // import CoinDisplay from '../components/CoinsDisplay'; // Import the CoinDisplay component
-import i18n from "../locales/localization"; // Import localization
+import i18n from "@/locales/localization";
 import { useUser } from "@/contexts/UserContext";
 import { UserContextType } from "@/types/user";
-import * as images from "@/assets/images";
-
-const avatars = [
-  { id: "default", source: images.userIcon },
-  { id: "1", source: images.avatars.avatar1 },
-  { id: "2", source: images.avatars.avatar2 },
-  { id: "3", source: images.avatars.avatar3 },
-  { id: "4", source: images.avatars.avatar4 },
-  { id: "5", source: images.avatars.avatar5 },
-  { id: "6", source: images.avatars.avatar6 },
-  { id: "7", source: images.avatars.avatar7 },
-  { id: "8", source: images.avatars.avatar8 },
-  { id: "9", source: images.avatars.avatar9 },
-  { id: "10", source: images.avatars.avatar10 },
-  { id: "11", source: images.avatars.avatar11 },
-  { id: "12", source: images.avatars.avatar12 },
-  { id: "13", source: images.avatars.avatar13 },
-  { id: "14", source: images.avatars.avatar14 },
-  { id: "15", source: images.avatars.avatar15 },
-  { id: "16", source: images.avatars.avatar16 },
-];
-
-const getAvatarSource = (id: string) => {
-  const avatar = avatars.find((avatar) => avatar.id === id);
-  return avatar ? avatar.source : avatars[0].source; // Default to first avatar if not found
-};
+import { getAvatarSource } from "./constants";
+import { Link } from "expo-router";
 
 const HomeScreen = () => {
   const { user, updateNickname, updateAvatar } = useUser() as UserContextType;
@@ -59,12 +36,12 @@ const HomeScreen = () => {
     }
   }, [user?.scores]);
 
-  const handleNicknameSubmit = (newNickname) => {
+  const handleNicknameSubmit = (newNickname: string) => {
     updateNickname(newNickname);
     setIsEditing(false);
   };
 
-  const handleAvatarChange = (avatarId) => {
+  const handleAvatarChange = (avatarId: string) => {
     updateAvatar(avatarId);
     setAvatarModalVisible(false);
   };
@@ -76,9 +53,12 @@ const HomeScreen = () => {
       : []),
   ];
 
-  const renderAvatarOption = ({ item }) => (
+  const renderAvatarOption = ({ item }: { item: string }) => (
     <TouchableOpacity key={item} onPress={() => handleAvatarChange(item)}>
-      <Image source={getAvatarSource(item)} style={styles.avatarItem} />
+      <Image
+        source={getAvatarSource(item) as ImageSourcePropType}
+        style={styles.avatarItem}
+      />
     </TouchableOpacity>
   );
 
@@ -88,7 +68,9 @@ const HomeScreen = () => {
       <View style={styles.userInfoSection}>
         <TouchableOpacity onPress={() => setAvatarModalVisible(true)}>
           <Image
-            source={getAvatarSource(user?.avatar || "default")}
+            source={
+              getAvatarSource(user?.avatar || "default") as ImageSourcePropType
+            }
             style={styles.userIcon}
           />
         </TouchableOpacity>
@@ -111,30 +93,28 @@ const HomeScreen = () => {
         )}
         <Text style={styles.progressText}>
           {i18n.t("level")}: {user?.level || 1} - {i18n.t("progress")}:{" "}
-          {Math.round(((user?.questionsSolved % 15) / 15) * 100)}%
+          {Math.round(((user?.questionsSolved || 0 % 15) / 15) * 100)}%
         </Text>
-        {thankYouMessage && (
+        {thankYouMessage ? (
           <Text style={styles.thankYouMessage}>{thankYouMessage}</Text>
-        )}
-        {user &&
-          !user.testCompleted && ( // Only show if test has not been completed
-            <View style={styles.buttonContainer}>
-              <Button
-                title={i18n.t("testSkills")}
-                // onPress={() => navigation.navigate("TestSkills")}
-                color="#8A2BE2"
-              />
+        ) : null}
+        {user && !user.testCompleted ? (
+          <Link href="/test" asChild>
+            <TouchableOpacity style={styles.buttonContainer}>
+              <View>
+                <Text style={styles.buttonText}>{i18n.t("testSkills")}</Text>
+              </View>
+            </TouchableOpacity>
+          </Link>
+        ) : null}
+        <Link href="/test" asChild>
+          <TouchableOpacity style={styles.greenButton}>
+            <View>
+              <Text style={styles.buttonText}>{i18n.t("startLearning")}</Text>
             </View>
-          )}
-        <View style={styles.extraMargin}>
-          <Button
-            title={i18n.t("startLearning")}
-            // onPress={() => navigation.navigate("LearningModule")}
-            color="#32CD32"
-          />
-        </View>
+          </TouchableOpacity>
+        </Link>
       </View>
-      {/* <BottomNavigation navigation={navigation} /> */}
       <Modal
         visible={avatarModalVisible}
         animationType="slide"
@@ -202,6 +182,32 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     marginTop: 20,
+    backgroundColor: "#8A2BE2",
+    padding: 10,
+    borderRadius: 5,
+    width: 150,
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  greenButton: {
+    marginTop: 20,
+    backgroundColor: "#32CD32",
+    padding: 10,
+    borderRadius: 5,
+    width: 150,
+    elevation: 3,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+  },
+  buttonText: {
+    color: "white",
+    textAlign: "center",
+    textTransform: "uppercase",
   },
   extraMargin: {
     marginTop: 10, // Additional space between the two buttons
