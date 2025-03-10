@@ -3,11 +3,11 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   StyleSheet,
   Image,
   TouchableOpacity,
   Alert,
+  ImageSourcePropType,
 } from "react-native";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { FIREBASE_AUTH, FIREBASE_DB } from "@/firebaseConfig";
@@ -15,6 +15,7 @@ import { doc, getDoc } from "firebase/firestore";
 import { useUser } from "@/contexts/UserContext";
 import i18n from "@/locales/localization";
 import { router } from "expo-router";
+import * as images from "@/assets/images";
 // import { customEvent } from 'vexo-analytics'
 
 const LoginScreen = () => {
@@ -65,7 +66,7 @@ const LoginScreen = () => {
         console.error("No user doc exists");
         Alert.alert(i18n.t("loginError"), i18n.t("noUserDataAvailable"));
       }
-    } catch (error: any) {
+    } catch (error: unknown) {
       console.error("Login error:", error);
       console.error("Error details:", error.message);
       Alert.alert(
@@ -79,7 +80,7 @@ const LoginScreen = () => {
     <View style={styles.container}>
       <Text style={styles.header}>{i18n.t("mathAdventure")}</Text>
       <Image
-        source={require("../assets/images/loginIllustration.png")}
+        source={images.loginIllustration as ImageSourcePropType}
         style={styles.illustration}
       />
       <TextInput

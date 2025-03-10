@@ -11,29 +11,29 @@ import {
   FlatList,
 } from "react-native";
 // import CoinDisplay from '../components/CoinsDisplay'; // Import the CoinDisplay component
-// import BottomNavigation from '../components/BottomNavigation'; // Import the BottomNavigation component
 import i18n from "../locales/localization"; // Import localization
 import { useUser } from "@/contexts/UserContext";
 import { UserContextType } from "@/types/user";
+import * as images from "@/assets/images";
 
 const avatars = [
-  { id: "default", source: require("@/assets/images/userIcon.png") },
-  { id: "1", source: require("@/assets/images/store/avatar1.png") },
-  { id: "2", source: require("@/assets/images/store/avatar2.png") },
-  { id: "3", source: require("@/assets/images/store/avatar3.png") },
-  { id: "4", source: require("@/assets/images/store/avatar4.png") },
-  { id: "5", source: require("@/assets/images/store/avatar5.png") },
-  { id: "6", source: require("@/assets/images/store/avatar6.png") },
-  { id: "7", source: require("@/assets/images/store/avatar7.png") },
-  { id: "8", source: require("@/assets/images/store/avatar8.png") },
-  { id: "9", source: require("@/assets/images/store/avatar9.png") },
-  { id: "10", source: require("@/assets/images/store/avatar10.png") },
-  { id: "11", source: require("@/assets/images/store/avatar11.png") },
-  { id: "12", source: require("@/assets/images/store/avatar12.png") },
-  { id: "13", source: require("@/assets/images/store/avatar13.png") },
-  { id: "14", source: require("@/assets/images/store/avatar14.png") },
-  { id: "15", source: require("@/assets/images/store/avatar15.png") },
-  { id: "16", source: require("@/assets/images/store/avatar16.png") },
+  { id: "default", source: images.userIcon },
+  { id: "1", source: images.avatars.avatar1 },
+  { id: "2", source: images.avatars.avatar2 },
+  { id: "3", source: images.avatars.avatar3 },
+  { id: "4", source: images.avatars.avatar4 },
+  { id: "5", source: images.avatars.avatar5 },
+  { id: "6", source: images.avatars.avatar6 },
+  { id: "7", source: images.avatars.avatar7 },
+  { id: "8", source: images.avatars.avatar8 },
+  { id: "9", source: images.avatars.avatar9 },
+  { id: "10", source: images.avatars.avatar10 },
+  { id: "11", source: images.avatars.avatar11 },
+  { id: "12", source: images.avatars.avatar12 },
+  { id: "13", source: images.avatars.avatar13 },
+  { id: "14", source: images.avatars.avatar14 },
+  { id: "15", source: images.avatars.avatar15 },
+  { id: "16", source: images.avatars.avatar16 },
 ];
 
 const getAvatarSource = (id: string) => {

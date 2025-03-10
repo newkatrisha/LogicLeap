@@ -9,7 +9,7 @@ export interface User {
   purchasedItems: string[];
   purchasedStories: { id: number; name: string }[];
   avatar: string;
-  scores?: any;
+  scores?: unknown;
 }
 
 export interface UserContextType {

@@ -6,6 +6,7 @@ import {
   StyleSheet,
   ActivityIndicator,
   Alert,
+  ImageSourcePropType,
 } from "react-native";
 import { signInAnonymously } from "firebase/auth";
 import { FIREBASE_AUTH } from "@/firebaseConfig";
@@ -13,6 +14,7 @@ import i18n from "../locales/localization";
 // import { customEvent } from 'vexo-analytics'
 import { useUser } from "@/contexts/UserContext";
 import { router } from "expo-router";
+import * as images from "@/assets/images";
 
 const WelcomeScreen = () => {
   const { user } = useUser();
@@ -75,7 +77,7 @@ const WelcomeScreen = () => {
   return (
     <View style={styles.container}>
       <Image
-        source={require("@/assets/images/homepageBackground.png")}
+        source={images.homepageBackground as ImageSourcePropType}
         style={styles.backgroundImage}
       />
       {renderContent()}

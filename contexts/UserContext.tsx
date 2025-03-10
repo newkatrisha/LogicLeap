@@ -9,11 +9,14 @@ const UserContext = createContext<UserContextType>({} as UserContextType);
 
 export const useUser = () => useContext(UserContext);
 
-export const UserProvider = ({ children }) => {
+export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [testCompleted, setTestCompleted] = useState(false);
 
-  const sanitizeUserData = (firebaseUser, additionalData = {}) => {
+  const sanitizeUserData = (
+    firebaseUser: User,
+    additionalData: Record<string, unknown>
+  ) => {
     return {
       uid: firebaseUser.uid,
       email: firebaseUser.email,
@@ -138,7 +141,7 @@ export const UserProvider = ({ children }) => {
 
   const updateLevelIfNeeded = async () => {
     if (user) {
-      let newLevel = 1 + Math.floor(user.questionsSolved / 15); // Increase level every 15 questions solved
+      const newLevel = 1 + Math.floor(user.questionsSolved / 15); // Increase level every 15 questions solved
       if (newLevel > user.level) {
         setUser((prev) => ({
           ...prev,

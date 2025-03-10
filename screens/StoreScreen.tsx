@@ -1,12 +1,18 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Image,
+  ImageSourcePropType,
+} from "react-native";
 import i18n from "../locales/localization";
-import { router } from "expo-router";
+import * as images from "@/assets/images";
+
+// import { router } from "expo-router";
 
 const StoreScreen = () => {
-  const defaultAvatarImage = require("../assets/images/userIcon.png");
-  const defaultStoryImage = require("../assets/images/backgroundStories.png");
-
   const handleNavigateToAvatars = () => {
     // router.navigate("Avatars");
   };
@@ -25,14 +31,20 @@ const StoreScreen = () => {
             style={styles.itemContainer}
             onPress={handleNavigateToAvatars}
           >
-            <Image source={defaultAvatarImage} style={styles.itemImage} />
+            <Image
+              source={images.userIcon as ImageSourcePropType}
+              style={styles.itemImage}
+            />
             <Text style={styles.itemCost}>{i18n.t("avatars")}</Text>
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.itemContainer}
             onPress={handleNavigateToStories}
           >
-            <Image source={defaultStoryImage} style={styles.itemImage} />
+            <Image
+              source={images.backgroundStories as ImageSourcePropType}
+              style={styles.itemImage}
+            />
             <Text style={styles.itemCost}>{i18n.t("stories")}</Text>
           </TouchableOpacity>
         </View>
