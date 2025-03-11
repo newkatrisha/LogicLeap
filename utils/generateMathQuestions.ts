@@ -1,10 +1,19 @@
-export const generateMathQuestions = (type: number, age: number) => {
-  const questions = [];
+export type MathQuestion = {
+  question: string;
+  answer: number;
+  choices: number[];
+  num1: number;
+  operation: string;
+  num2: number;
+};
+
+export const generateMathQuestions = (type: number, age = 0) => {
+  const questions: MathQuestion[] = [];
   let numQuestions = 5; // Default number of questions
-  let operations = { sum: "+", minus: "-", multiply: "*", divide: "/" }; // Map operation types to symbols
+  const operations = { sum: "+", minus: "-", multiply: "*", divide: "/" }; // Map operation types to symbols
   let operationKeys = ["sum"]; // Default to addition
   let maxNum1 = 10; // Default max number for the first number
-  let maxNum2 = 10; // Default max number for the second number
+  const maxNum2 = 10; // Default max number for the second number
 
   if (typeof type === "number") {
     age = type;
@@ -17,7 +26,7 @@ export const generateMathQuestions = (type: number, age: number) => {
     maxNum1 = age >= 7 ? 100 : 10;
   }
 
-  const generateChoices = (correctAnswer) => {
+  const generateChoices = (correctAnswer: number) => {
     const choices = new Set();
     choices.add(correctAnswer);
 
@@ -58,14 +67,16 @@ export const generateMathQuestions = (type: number, age: number) => {
         }
       }
 
-      const question = `What is ${num1} ${operations[key]} ${num2}?`;
-      const choices = generateChoices(answer);
+      const question = `What is ${num1} ${
+        operations[key as keyof typeof operations]
+      } ${num2}?`;
+      const choices = generateChoices(Number(answer));
       questions.push({
         question,
-        answer,
-        choices,
+        answer: Number(answer),
+        choices: choices as number[],
         num1,
-        operation: operations[key],
+        operation: operations[key as keyof typeof operations],
         num2,
       });
     }

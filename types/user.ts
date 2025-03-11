@@ -6,16 +6,17 @@ export interface User {
   coins: number;
   age?: number;
   nickname?: string;
-  purchasedItems: string[];
-  purchasedStories: { id: number; name: string }[];
-  avatar: string;
-  scores: Record<string, number>;
+  purchasedItems?: string[];
+  purchasedStories?: { id: number; name: string }[];
+  avatar?: string;
+  scores?: Record<string, number>;
   testCompleted?: boolean;
 }
 
 export interface UserContextType {
   user: User | null;
   signOut?: () => Promise<void>;
+  login: (userData: User) => void;
   logout: () => Promise<void>;
   updateNickname: (nickname: string) => Promise<void>;
   updateAvatar: (avatarId: string) => Promise<void>;

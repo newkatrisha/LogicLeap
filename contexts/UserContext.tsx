@@ -7,13 +7,21 @@ import { User, UserContextType } from "@/types/user";
 
 const UserContext = createContext<UserContextType>({} as UserContextType);
 
+type FirebaseUser = {
+  uid: string;
+  email: string;
+  level: number;
+  questionsSolved: number;
+  coins: number;
+};
+
 export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
 
   const sanitizeUserData = (
-    firebaseUser: User,
+    firebaseUser: FirebaseUser,
     additionalData: Record<string, unknown>
   ) => {
     return {
@@ -113,7 +121,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     updateStorage();
   }, [user]);
 
-  const login = (userData) => setUser(userData);
+  const login = (userData: User) => setUser(userData);
 
   const logout = async () => {
     await FIREBASE_AUTH.signOut();
@@ -131,7 +139,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     });
   };
 
-  const updateNickname = async (newNickname) => {
+  const updateNickname = async (newNickname: string) => {
     if (user) {
       const userRef = doc(FIREBASE_DB, "users", user.uid);
       try {
@@ -156,7 +164,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         return { newLevel, leveledUp: true }; // Return the new level and that a level up occurred
       }
     }
-    return { newLevel: user.level, leveledUp: false }; // No level change occurred
+    return { newLevel: user?.level || 1, leveledUp: false }; // No level change occurred
   };
 
   const updateCoins = (additionalCoins) => {

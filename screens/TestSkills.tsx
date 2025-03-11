@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, TextInput, Button, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { generateMathQuestions } from "@/utils/generateMathQuestions";
+import {
+  generateMathQuestions,
+  MathQuestion,
+} from "@/utils/generateMathQuestions";
 import { useUser } from "@/contexts/UserContext";
 import { router } from "expo-router";
 
 const TestSkills = () => {
   const navigation = useNavigation();
   const { user, markTestCompleted, updateScores } = useUser();
-  const [questions, setQuestions] = useState([]);
+  const [questions, setQuestions] = useState<MathQuestion[]>([]);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [userAnswer, setUserAnswer] = useState("");
 
   useEffect(() => {
     handleStart();
-  }, []); // Dependency array is empty, so this runs only once when the component mounts
+  }, []);
 
   const handleStart = () => {
     if (!user || !user.age) {
@@ -23,6 +26,7 @@ const TestSkills = () => {
       return;
     }
     const generatedQuestions = generateMathQuestions(user.age);
+
     setQuestions(generatedQuestions);
     setQuestionIndex(1); // Set to 1 since array index 0 will be accessed as the first question
     setUserAnswer("");
@@ -49,7 +53,7 @@ const TestSkills = () => {
 
   return (
     <View style={styles.container}>
-      {questions.length > 0 && questionIndex > 0 && (
+      {questions.length > 0 && questionIndex > 0 ? (
         <View style={styles.questionContainer}>
           <Text style={styles.questionText}>
             {questions[questionIndex - 1].question}
@@ -63,6 +67,8 @@ const TestSkills = () => {
           />
           <Button title="Submit Answer" onPress={handleAnswerSubmit} />
         </View>
+      ) : (
+        <Text>No questions available</Text>
       )}
     </View>
   );

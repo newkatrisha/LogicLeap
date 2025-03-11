@@ -47,7 +47,7 @@ const LoginScreen = () => {
         // Create a properly formatted user object
         const customUser = {
           uid: userCredential.user.uid,
-          email: userCredential.user.email,
+          email: userCredential.user.email || "",
           level: userData.level || 1,
           questionsSolved: userData.questionsSolved || 0,
           coins: userData.coins || 0,
@@ -61,18 +61,17 @@ const LoginScreen = () => {
         };
 
         login(customUser);
-        // router.push("/(tabs)");
       } else {
         console.error("No user doc exists");
         Alert.alert(i18n.t("loginError"), i18n.t("noUserDataAvailable"));
       }
     } catch (error: unknown) {
-      console.error("Login error:", error);
-      console.error("Error details:", error.message);
-      Alert.alert(
-        i18n.t("loginError"),
-        error.message || "Authentication failed"
-      );
+      let errorMessage = "Authentication failed";
+
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      Alert.alert(i18n.t("loginError"), errorMessage);
     }
   };
 
@@ -106,13 +105,7 @@ const LoginScreen = () => {
           {passwordVisible ? i18n.t("hidePassword") : i18n.t("showPassword")}
         </Text>
       </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.loginButton}
-        onPress={() => {
-          console.log("Login button touched");
-          handleLogin();
-        }}
-      >
+      <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
         <Text style={styles.buttonText}>{i18n.t("enter")}</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => router.push("/signup")}>
