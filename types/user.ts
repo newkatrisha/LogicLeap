@@ -9,7 +9,7 @@ export interface User {
   purchasedItems: string[];
   purchasedStories: { id: number; name: string }[];
   avatar: string;
-  scores?: unknown;
+  scores: Record<string, number>;
   testCompleted?: boolean;
 }
 
@@ -19,8 +19,9 @@ export interface UserContextType {
   logout: () => Promise<void>;
   updateNickname: (nickname: string) => Promise<void>;
   updateAvatar: (avatarId: string) => Promise<void>;
-  updateCoins: (additionalCoins: number) => Promise<void>;
-  updateQuestionsSolved: (additionalQuestions: number) => Promise<void>;
-  markTestCompleted: () => Promise<void>;
+  updateCoins: (additionalCoins: number) => void;
+  updateQuestionsSolved: (additionalQuestions: number) => void;
+  markTestCompleted: () => void;
   testCompleted: boolean;
+  updateScores: (operation: string) => void;
 }

@@ -25,16 +25,16 @@ const HomeScreen = () => {
   const [nickname, setNickname] = useState(user?.nickname || "");
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
 
-  useEffect(() => {
-    if (user?.scores) {
-      const message = i18n.t("thankYouMessage");
-      setThankYouMessage(message);
+  // useEffect(() => {
+  //   if (user?.scores) {
+  //     const message = i18n.t("thankYouMessage");
+  //     setThankYouMessage(message);
 
-      setTimeout(() => {
-        setThankYouMessage("");
-      }, 5000);
-    }
-  }, [user?.scores]);
+  //     setTimeout(() => {
+  //       setThankYouMessage("");
+  //     }, 5000);
+  //   }
+  // }, [user?.scores]);
 
   const handleNicknameSubmit = (newNickname: string) => {
     updateNickname(newNickname);

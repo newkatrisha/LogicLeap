@@ -7,11 +7,10 @@ import { router } from "expo-router";
 
 const TestSkills = () => {
   const navigation = useNavigation();
-  const { user, markTestCompleted } = useUser();
+  const { user, markTestCompleted, updateScores } = useUser();
   const [questions, setQuestions] = useState([]);
   const [questionIndex, setQuestionIndex] = useState(0);
   const [userAnswer, setUserAnswer] = useState("");
-  const [scores, setScores] = useState({ plus: 0, minus: 0, multiply: 0 });
 
   useEffect(() => {
     handleStart();
@@ -27,7 +26,6 @@ const TestSkills = () => {
     setQuestions(generatedQuestions);
     setQuestionIndex(1); // Set to 1 since array index 0 will be accessed as the first question
     setUserAnswer("");
-    setScores({ plus: 0, minus: 0, multiply: 0 });
   };
 
   const handleAnswerSubmit = () => {
@@ -38,10 +36,7 @@ const TestSkills = () => {
         : currentQuestion.question.includes("-")
         ? "minus"
         : "multiply";
-      setScores((prevScores) => ({
-        ...prevScores,
-        [operation]: prevScores[operation] + 1,
-      }));
+      updateScores(operation);
     }
     setUserAnswer("");
     if (questionIndex < questions.length) {

@@ -11,7 +11,6 @@ export const useUser = () => useContext(UserContext);
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [testCompleted, setTestCompleted] = useState(false);
 
   const sanitizeUserData = (
     firebaseUser: User,
@@ -30,13 +29,14 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
         { id: 0, name: "Harry Potter" },
       ],
       avatar: additionalData.avatar || "default",
+      scores: { plus: 0, minus: 0, multiply: 0 },
     };
   };
 
   useEffect(() => {
     const loadUser = async () => {
       const userData = await AsyncStorage.getItem("userData");
-      console.log("userData", userData);
+
       if (userData) {
         setUser(JSON.parse(userData));
       }
@@ -121,8 +121,14 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     await AsyncStorage.removeItem("userData");
   };
 
-  const markTestCompleted = async () => {
-    setTestCompleted(true);
+  const markTestCompleted = () => {
+    setUser((prev: User | null) => {
+      if (!prev) return null;
+      return {
+        ...prev,
+        testCompleted: true,
+      };
+    });
   };
 
   const updateNickname = async (newNickname) => {
@@ -139,7 +145,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const updateLevelIfNeeded = async () => {
+  const updateLevelIfNeeded = () => {
     if (user) {
       const newLevel = 1 + Math.floor(user.questionsSolved / 15); // Increase level every 15 questions solved
       if (newLevel > user.level) {
@@ -153,7 +159,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     return { newLevel: user.level, leveledUp: false }; // No level change occurred
   };
 
-  const updateCoins = async (additionalCoins) => {
+  const updateCoins = (additionalCoins) => {
     if (user) {
       const newCoins = user.coins + additionalCoins;
       setUser((prev) => ({
@@ -163,7 +169,22 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const updateQuestionsSolved = async (additionalQuestions) => {
+  const updateScores = (operation: string) => {
+    if (user) {
+      setUser((prevUser: User | null) => {
+        if (!prevUser) return null;
+        return {
+          ...prevUser,
+          scores: {
+            ...prevUser.scores,
+            [operation]: (prevUser.scores[operation] || 0) + 1,
+          },
+        };
+      });
+    }
+  };
+
+  const updateQuestionsSolved = (additionalQuestions: number) => {
     if (user) {
       const QuestionsSolved = user.questionsSolved + additionalQuestions;
       setUser((prev) => ({
@@ -173,7 +194,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const updateAvatar = async (newAvatar) => {
+  const updateAvatar = async (newAvatar: string) => {
     if (user) {
       const userRef = doc(FIREBASE_DB, "users", user.uid);
       try {
@@ -198,9 +219,9 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     <UserContext.Provider
       value={{
         user,
+        updateScores,
         login,
         logout,
-        testCompleted,
         markTestCompleted,
         updateNickname,
         updateLevelIfNeeded,
