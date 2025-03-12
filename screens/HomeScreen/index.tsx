@@ -107,7 +107,7 @@ const HomeScreen = () => {
             </TouchableOpacity>
           </Link>
         ) : null}
-        <Link href="/test" asChild>
+        <Link href="/learning" asChild>
           <TouchableOpacity style={styles.greenButton}>
             <View>
               <Text style={styles.buttonText}>{i18n.t("startLearning")}</Text>
