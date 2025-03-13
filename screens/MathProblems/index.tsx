@@ -6,23 +6,12 @@ import {
 } from "@/utils/generateMathQuestions";
 import { useUser } from "@/contexts/UserContext";
 // import LevelUpModal from "../components/LevelUpModal";
-import i18n from "../locales/localization";
-// import { Audio } from "expo-av";
+import i18n from "@/locales/localization";
+import { Audio } from "expo-av";
 import { useLocalSearchParams } from "expo-router";
 import * as images from "@/assets/images";
 import CoinDisplay from "@/components/CoinDisplay";
-
-// const correctSoundFiles = {
-//     en: require('../../assets/sounds/good_job_en.aac'),
-//     ru: require('../../assets/sounds/good_job_ru.aac'),
-//     he: require('../../assets/sounds/good_job_he.aac'),
-// };
-
-// const incorrectSoundFiles = {
-//     en: require('../../assets/sounds/try_again_en.aac'),
-//     ru: require('../../assets/sounds/try_again_ru.aac'),
-//     he: require('../../assets/sounds/try_again_he.aac'),
-// };
+import { correctSoundFiles, incorrectSoundFiles } from "./constants";
 
 const MathProblems = () => {
   const { type } = useLocalSearchParams<{ type: string }>();
@@ -41,25 +30,29 @@ const MathProblems = () => {
   const language = i18n.locale;
   const correctAnswer = questions[currentQuestionIndex]?.answer;
 
-  // useEffect(() => {
-  //     const loadSounds = async () => {
-  //         try {
-  //             const { sound: correctSound } = await Audio.Sound.createAsync(correctSoundFiles[language]);
-  //             const { sound: incorrectSound } = await Audio.Sound.createAsync(incorrectSoundFiles[language]);
-  //             correctSoundRef.current = correctSound;
-  //             incorrectSoundRef.current = incorrectSound;
-  //         } catch (error) {
-  //             console.error('Error loading sounds:', error);
-  //         }
-  //     };
+  useEffect(() => {
+    const loadSounds = async () => {
+      try {
+        const { sound: correctSound } = await Audio.Sound.createAsync(
+          correctSoundFiles[language]
+        );
+        const { sound: incorrectSound } = await Audio.Sound.createAsync(
+          incorrectSoundFiles[language]
+        );
+        correctSoundRef.current = correctSound;
+        incorrectSoundRef.current = incorrectSound;
+      } catch (error) {
+        console.error("Error loading sounds:", error);
+      }
+    };
 
-  //     loadSounds();
+    loadSounds();
 
-  //     return () => {
-  //         correctSoundRef.current?.unloadAsync();
-  //         incorrectSoundRef.current?.unloadAsync();
-  //     };
-  // }, [language]);
+    return () => {
+      correctSoundRef.current?.unloadAsync();
+      incorrectSoundRef.current?.unloadAsync();
+    };
+  }, [language]);
 
   useEffect(() => {
     if (user && user.age && questions.length === 0) {
@@ -74,9 +67,9 @@ const MathProblems = () => {
     setFeedbackImage(isCorrect ? images.correctSmile : images.incorrectSmile);
 
     if (isCorrect) {
-      // if (correctSoundRef.current) {
-      //     await correctSoundRef.current.replayAsync();
-      // }
+      if (correctSoundRef.current) {
+        await correctSoundRef.current.replayAsync();
+      }
       updateCoins(1);
       updateQuestionsSolved(1);
 
@@ -98,9 +91,9 @@ const MathProblems = () => {
         resetFeedback();
       }, 2000);
     } else {
-      // if (incorrectSoundRef.current) {
-      //     await incorrectSoundRef.current.replayAsync();
-      // }
+      if (incorrectSoundRef.current) {
+        await incorrectSoundRef.current.replayAsync();
+      }
       setTimeout(resetFeedback, 2000);
     }
   };

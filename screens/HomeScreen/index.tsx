@@ -11,12 +11,12 @@ import {
   FlatList,
   ImageSourcePropType,
 } from "react-native";
-// import CoinDisplay from '../components/CoinsDisplay'; // Import the CoinDisplay component
+import { Link } from "expo-router";
 import i18n from "@/locales/localization";
 import { useUser } from "@/contexts/UserContext";
+import CoinDisplay from "@/components/CoinDisplay";
 import { UserContextType } from "@/types/user";
 import { getAvatarSource } from "./constants";
-import { router } from "expo-router";
 
 const HomeScreen = () => {
   const { user, updateNickname, updateAvatar } = useUser() as UserContextType;
@@ -64,7 +64,7 @@ const HomeScreen = () => {
 
   return (
     <View style={styles.container}>
-      {/* <CoinDisplay /> */}
+      <CoinDisplay />
       <View style={styles.userInfoSection}>
         <TouchableOpacity onPress={() => setAvatarModalVisible(true)}>
           <Image
@@ -99,24 +99,21 @@ const HomeScreen = () => {
           <Text style={styles.thankYouMessage}>{thankYouMessage}</Text>
         ) : null}
         {user && !user.testCompleted ? (
-          <TouchableOpacity
-            style={styles.buttonContainer}
-            onPress={() => router.push("/home/test")}
-          >
+          <Link href="/home/test" asChild>
+            <TouchableOpacity style={styles.buttonContainer}>
+              <View>
+                <Text style={styles.buttonText}>{i18n.t("testSkills")}</Text>
+              </View>
+            </TouchableOpacity>
+          </Link>
+        ) : null}
+        <Link href="/home/learning" asChild>
+          <TouchableOpacity style={styles.greenButton}>
             <View>
-              <Text style={styles.buttonText}>{i18n.t("testSkills")}</Text>
+              <Text style={styles.buttonText}>{i18n.t("startLearning")}</Text>
             </View>
           </TouchableOpacity>
-        ) : null}
-
-        <TouchableOpacity
-          style={styles.greenButton}
-          onPress={() => router.push("/home/learning")}
-        >
-          <View>
-            <Text style={styles.buttonText}>{i18n.t("startLearning")}</Text>
-          </View>
-        </TouchableOpacity>
+        </Link>
       </View>
       <Modal
         visible={avatarModalVisible}
