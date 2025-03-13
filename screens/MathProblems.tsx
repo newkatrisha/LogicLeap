@@ -1,13 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
-import { generateMathQuestions } from "@/utils/generateMathQuestions";
+import {
+  generateMathQuestions,
+  MathQuestion,
+} from "@/utils/generateMathQuestions";
 import { useUser } from "@/contexts/UserContext";
-// import CoinDisplay from "../components/CoinsDisplay";
 // import LevelUpModal from "../components/LevelUpModal";
 import i18n from "../locales/localization";
 // import { Audio } from "expo-av";
 import { useLocalSearchParams } from "expo-router";
 import * as images from "@/assets/images";
+import CoinDisplay from "@/components/CoinDisplay";
 
 // const correctSoundFiles = {
 //     en: require('../../assets/sounds/good_job_en.aac'),
@@ -25,7 +28,7 @@ const MathProblems = () => {
   const { type } = useLocalSearchParams<{ type: string }>();
   const { user, updateLevelIfNeeded, updateCoins, updateQuestionsSolved } =
     useUser();
-  const [questions, setQuestions] = useState([]);
+  const [questions, setQuestions] = useState<MathQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [feedback, setFeedback] = useState("");
   const [feedbackImage, setFeedbackImage] = useState(null);
@@ -134,7 +137,7 @@ const MathProblems = () => {
 
   return (
     <View style={styles.container}>
-      {/* <CoinDisplay /> */}
+      <CoinDisplay />
       {renderQuestion()}
       <View style={styles.choicesContainer}>
         {questions[currentQuestionIndex]?.choices.map((choice, index) => (

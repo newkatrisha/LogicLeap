@@ -7,25 +7,24 @@ import {
   ImageBackground,
   ImageSourcePropType,
 } from "react-native";
-// import CoinDisplay from '../components/CoinsDisplay';
-
-import i18n from "../locales/localization";
+import i18n from "@/locales/localization";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import * as images from "@/assets/images";
 import { router } from "expo-router";
+import CoinDisplay from "@/components/CoinDisplay";
 // import { customEvent } from 'vexo-analytics'
 
 const LearningModule = () => {
   const handlePress = (type: string) => {
-    router.push(`/math/${type}`);
+    router.push(`/home/math/${type}`);
     // customEvent("Choose math problem", { type: type});
   };
 
   return (
     <View style={styles.container}>
-      {/* <CoinDisplay /> */}
+      <CoinDisplay />
       <View style={styles.content}>
         <Text style={styles.storiesHeader}>{i18n.t("stories")}</Text>
         <TouchableOpacity

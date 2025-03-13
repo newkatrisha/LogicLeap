@@ -16,7 +16,7 @@ import i18n from "@/locales/localization";
 import { useUser } from "@/contexts/UserContext";
 import { UserContextType } from "@/types/user";
 import { getAvatarSource } from "./constants";
-import { Link } from "expo-router";
+import { router } from "expo-router";
 
 const HomeScreen = () => {
   const { user, updateNickname, updateAvatar } = useUser() as UserContextType;
@@ -99,21 +99,24 @@ const HomeScreen = () => {
           <Text style={styles.thankYouMessage}>{thankYouMessage}</Text>
         ) : null}
         {user && !user.testCompleted ? (
-          <Link href="/test" asChild>
-            <TouchableOpacity style={styles.buttonContainer}>
-              <View>
-                <Text style={styles.buttonText}>{i18n.t("testSkills")}</Text>
-              </View>
-            </TouchableOpacity>
-          </Link>
-        ) : null}
-        <Link href="/learning" asChild>
-          <TouchableOpacity style={styles.greenButton}>
+          <TouchableOpacity
+            style={styles.buttonContainer}
+            onPress={() => router.push("/home/test")}
+          >
             <View>
-              <Text style={styles.buttonText}>{i18n.t("startLearning")}</Text>
+              <Text style={styles.buttonText}>{i18n.t("testSkills")}</Text>
             </View>
           </TouchableOpacity>
-        </Link>
+        ) : null}
+
+        <TouchableOpacity
+          style={styles.greenButton}
+          onPress={() => router.push("/home/learning")}
+        >
+          <View>
+            <Text style={styles.buttonText}>{i18n.t("startLearning")}</Text>
+          </View>
+        </TouchableOpacity>
       </View>
       <Modal
         visible={avatarModalVisible}
