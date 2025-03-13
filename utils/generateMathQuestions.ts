@@ -7,7 +7,7 @@ export type MathQuestion = {
   num2: number;
 };
 
-export const generateMathQuestions = (type: number, age = 0) => {
+export const generateMathQuestions = (type: number | string, age = 0) => {
   const questions: MathQuestion[] = [];
   let numQuestions = 5; // Default number of questions
   const operations = { sum: "+", minus: "-", multiply: "*", divide: "/" }; // Map operation types to symbols

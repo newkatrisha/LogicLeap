@@ -6,19 +6,21 @@ import {
   StyleSheet,
   ImageSourcePropType,
 } from "react-native";
-import { Audio } from "expo-av";
+import { Audio, AVPlaybackSource } from "expo-av";
 import { useUser } from "@/contexts/UserContext";
 import * as images from "@/assets/images";
 import * as sounds from "@/assets/sounds";
 
 const CoinDisplay = () => {
   const { user } = useUser();
-  const soundRef = useRef(null);
+  const soundRef = useRef<Audio.Sound | null>(null);
   const lastCoinsRef = useRef(user?.coins || 0);
 
   useEffect(() => {
     const loadSound = async () => {
-      const { sound } = await Audio.Sound.createAsync(sounds.coinFall);
+      const { sound } = await Audio.Sound.createAsync(
+        sounds.coinFall as AVPlaybackSource
+      );
       soundRef.current = sound;
     };
 
@@ -33,7 +35,7 @@ const CoinDisplay = () => {
     if (user?.coins && user.coins > lastCoinsRef.current && soundRef.current) {
       const playSound = async () => {
         try {
-          await soundRef.current.replayAsync();
+          await soundRef.current?.replayAsync();
           lastCoinsRef.current = user?.coins || 0; // Update the last coin count after playing sound
         } catch (error) {
           console.error("Failed to play sound:", error);

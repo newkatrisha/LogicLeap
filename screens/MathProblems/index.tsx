@@ -1,17 +1,24 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+  ImageSourcePropType,
+} from "react-native";
 import {
   generateMathQuestions,
   MathQuestion,
 } from "@/utils/generateMathQuestions";
 import { useUser } from "@/contexts/UserContext";
-// import LevelUpModal from "../components/LevelUpModal";
 import i18n from "@/locales/localization";
 import { Audio } from "expo-av";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import * as images from "@/assets/images";
 import CoinDisplay from "@/components/CoinDisplay";
 import { correctSoundFiles, incorrectSoundFiles } from "./constants";
+import LevelUpModal from "@/components/LevelUpModal";
 
 const MathProblems = () => {
   const { type } = useLocalSearchParams<{ type: string }>();
@@ -20,12 +27,13 @@ const MathProblems = () => {
   const [questions, setQuestions] = useState<MathQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [feedback, setFeedback] = useState("");
-  const [feedbackImage, setFeedbackImage] = useState(null);
+  const [feedbackImage, setFeedbackImage] =
+    useState<ImageSourcePropType | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
   const [modalContent, setModalContent] = useState("");
-  const [selectedAnswer, setSelectedAnswer] = useState(null);
-  const correctSoundRef = useRef(null);
-  const incorrectSoundRef = useRef(null);
+  const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
+  const correctSoundRef = useRef<Audio.Sound | null>(null);
+  const incorrectSoundRef = useRef<Audio.Sound | null>(null);
 
   const language = i18n.locale;
   const correctAnswer = questions[currentQuestionIndex]?.answer;
@@ -34,10 +42,11 @@ const MathProblems = () => {
     const loadSounds = async () => {
       try {
         const { sound: correctSound } = await Audio.Sound.createAsync(
-          correctSoundFiles[language]
+          correctSoundFiles[language as keyof typeof correctSoundFiles],
+          { shouldPlay: false }
         );
         const { sound: incorrectSound } = await Audio.Sound.createAsync(
-          incorrectSoundFiles[language]
+          incorrectSoundFiles[language as keyof typeof incorrectSoundFiles]
         );
         correctSoundRef.current = correctSound;
         incorrectSoundRef.current = incorrectSound;
@@ -60,7 +69,7 @@ const MathProblems = () => {
     }
   }, [user, questions, type]);
 
-  const handleAnswerSubmit = async (choice) => {
+  const handleAnswerSubmit = async (choice: number) => {
     const isCorrect = choice === correctAnswer;
     setSelectedAnswer(choice);
     setFeedback(i18n.t(isCorrect ? "correct" : "incorrect"));
@@ -73,7 +82,8 @@ const MathProblems = () => {
       updateCoins(1);
       updateQuestionsSolved(1);
 
-      const { newLevel, leveledUp } = await updateLevelIfNeeded();
+      const { newLevel, leveledUp } = updateLevelIfNeeded();
+
       if (leveledUp) {
         setModalContent(
           `${i18n.t("congratulations")}! ${i18n.t("leveledUp")} ${newLevel}!`
@@ -91,8 +101,13 @@ const MathProblems = () => {
         resetFeedback();
       }, 2000);
     } else {
-      if (incorrectSoundRef.current) {
-        await incorrectSoundRef.current.replayAsync();
+      try {
+        if (incorrectSoundRef.current) {
+          await incorrectSoundRef.current.setPositionAsync(0);
+          await incorrectSoundRef.current.playAsync();
+        }
+      } catch (error) {
+        console.error("Error playing incorrect sound:", error);
       }
       setTimeout(resetFeedback, 2000);
     }
@@ -166,14 +181,14 @@ const MathProblems = () => {
           {feedback}
         </Text>
       )}
-      {/* <LevelUpModal
+      <LevelUpModal
         isVisible={modalVisible}
         onDismiss={() => {
           setModalVisible(false);
-        //   navigation.replace("LearningModule");
+          router.replace("/home/learning");
         }}
         message={modalContent}
-      /> */}
+      />
     </View>
   );
 };

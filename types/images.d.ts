@@ -1,10 +1,10 @@
 declare module "*.png" {
-  const content: string;
+  const content: ImageSourcePropType;
   export default content;
 }
 
 declare module "*.jpg" {
-  const content: string;
+  const content: ImageSourcePropType;
   export default content;
 }
 

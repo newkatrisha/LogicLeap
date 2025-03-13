@@ -22,6 +22,7 @@ export interface UserContextType {
   updateAvatar: (avatarId: string) => Promise<void>;
   updateCoins: (additionalCoins: number) => void;
   updateQuestionsSolved: (additionalQuestions: number) => void;
+  updateLevelIfNeeded: () => { newLevel: number; leveledUp: boolean };
   markTestCompleted: () => void;
   testCompleted: boolean;
   updateScores: (operation: string) => void;
