@@ -75,6 +75,7 @@ const AvatarsScreen = () => {
         keyExtractor={(item) => item.id}
         numColumns={2}
         columnWrapperStyle={styles.row}
+        showsVerticalScrollIndicator={false}
       />
     </View>
   );
