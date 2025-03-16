@@ -216,7 +216,10 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const updateProfile = (updates) => {
+  const updateProfile = (updates: {
+    purchasedItems?: string[];
+    coins?: number;
+  }) => {
     if (user) {
       const updatedUser = { ...user, ...updates };
       setUser(updatedUser);

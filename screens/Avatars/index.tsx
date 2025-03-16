@@ -6,8 +6,8 @@ import {
   TouchableOpacity,
   Image,
   FlatList,
+  ImageSourcePropType,
 } from "react-native";
-// import { FlatGrid } from 'react-native-super-grid';
 import { useUser } from "@/contexts/UserContext";
 import i18n from "@/locales/localization";
 import CoinDisplay from "@/components/CoinDisplay";
@@ -18,9 +18,8 @@ import { itemsForSale } from "./constants";
 
 const AvatarsScreen = () => {
   const { user, updateProfile } = useUser();
-  // Import the coin icon image
 
-  const handlePurchase = (item) => {
+  const handlePurchase = (item: { id: string; cost: number }) => {
     if (user?.coins || 0 >= item.cost) {
       // customEvent("avatar purchased", { id: item.id, cost: item.cost });
 
@@ -34,10 +33,14 @@ const AvatarsScreen = () => {
     }
   };
 
-  const renderItem = ({ item }) => {
+  const renderItem = ({
+    item,
+  }: {
+    item: { id: string; cost: number; image: ImageSourcePropType };
+  }) => {
     if (user?.purchasedItems?.includes(item.id)) return null;
 
-    const isAffordable = user?.coins || 0 >= item.cost;
+    const isAffordable = Boolean((user?.coins ?? 0) >= item.cost);
 
     return (
       <View style={styles.itemContainer}>
@@ -70,15 +73,9 @@ const AvatarsScreen = () => {
         )}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
+        numColumns={2}
+        columnWrapperStyle={styles.row}
       />
-      {/* <FlatGrid
-        itemDimension={130}
-        data={itemsForSale.filter(item => !user.purchasedItems.includes(item.id))}
-        renderItem={renderItem}
-        spacing={10}
-        keyExtractor={(item) => item.id}
-        style={styles.gridView}
-      /> */}
     </View>
   );
 };
@@ -86,7 +83,6 @@ const AvatarsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
     padding: 20,
     backgroundColor: "#f5f5f5",
   },
@@ -94,28 +90,25 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: "bold",
     marginBottom: 20,
-  },
-  gridView: {
-    flex: 1,
-    width: "100%",
-    marginBottom: 60,
+    alignSelf: "center",
   },
   itemContainer: {
     alignItems: "center",
     justifyContent: "center",
     padding: 10,
     backgroundColor: "#fff",
-    borderRadius: 30,
+    borderRadius: 50,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
     elevation: 2,
+    marginTop: 10,
   },
   itemImage: {
-    width: 100,
-    height: 100,
-    marginBottom: 10,
+    width: 130,
+    height: 130,
+    borderRadius: 100,
   },
   itemCost: {
     fontSize: 16,
@@ -143,6 +136,10 @@ const styles = StyleSheet.create({
   purchaseButtonText: {
     color: "#fff",
     fontSize: 16,
+  },
+  row: {
+    marginBottom: 10,
+    justifyContent: "space-between",
   },
 });
 

@@ -26,4 +26,8 @@ export interface UserContextType {
   markTestCompleted: () => void;
   testCompleted: boolean;
   updateScores: (operation: string) => void;
+  updateProfile: (updates: {
+    purchasedItems?: string[];
+    coins?: number;
+  }) => void;
 }
