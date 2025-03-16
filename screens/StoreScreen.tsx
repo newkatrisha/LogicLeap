@@ -9,34 +9,29 @@ import {
 } from "react-native";
 import i18n from "../locales/localization";
 import * as images from "@/assets/images";
-
-// import { router } from "expo-router";
+import CoinDisplay from "@/components/CoinDisplay";
+import { Link } from "expo-router";
 
 const StoreScreen = () => {
-  const handleNavigateToAvatars = () => {
-    // router.navigate("Avatars");
-  };
-
   const handleNavigateToStories = () => {
     // router.navigate("BuyStories");
   };
 
   return (
     <View style={styles.container}>
-      {/* <CoinDisplay /> */}
+      <CoinDisplay />
       <Text style={styles.title}>{i18n.t("store")}</Text>
       <View style={styles.contentContainer}>
         <View style={styles.gridView}>
-          <TouchableOpacity
-            style={styles.itemContainer}
-            onPress={handleNavigateToAvatars}
-          >
-            <Image
-              source={images.userIcon as ImageSourcePropType}
-              style={styles.itemImage}
-            />
-            <Text style={styles.itemCost}>{i18n.t("avatars")}</Text>
-          </TouchableOpacity>
+          <Link href="/store/avatars" asChild>
+            <TouchableOpacity style={styles.itemContainer}>
+              <Image
+                source={images.userIcon as ImageSourcePropType}
+                style={styles.itemImage}
+              />
+              <Text style={styles.itemCost}>{i18n.t("avatars")}</Text>
+            </TouchableOpacity>
+          </Link>
           <TouchableOpacity
             style={styles.itemContainer}
             onPress={handleNavigateToStories}

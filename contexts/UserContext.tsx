@@ -10,9 +10,9 @@ const UserContext = createContext<UserContextType>({} as UserContextType);
 type FirebaseUser = {
   uid: string;
   email: string;
-  level: number;
-  questionsSolved: number;
-  coins: number;
+  level?: number;
+  questionsSolved?: number;
+  coins?: number;
 };
 
 export const useUser = () => useContext(UserContext);
