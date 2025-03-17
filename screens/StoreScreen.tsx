@@ -9,17 +9,12 @@ import {
 } from "react-native";
 import i18n from "../locales/localization";
 import * as images from "@/assets/images";
-import CoinDisplay from "@/components/CoinDisplay";
 import { Link } from "expo-router";
+import ScreenContainer from "@/components/ScreenContainer";
 
 const StoreScreen = () => {
-  const handleNavigateToStories = () => {
-    // router.navigate("BuyStories");
-  };
-
   return (
-    <View style={styles.container}>
-      <CoinDisplay />
+    <ScreenContainer>
       <Text style={styles.title}>{i18n.t("store")}</Text>
       <View style={styles.contentContainer}>
         <View style={styles.gridView}>
@@ -29,32 +24,25 @@ const StoreScreen = () => {
                 source={images.userIcon as ImageSourcePropType}
                 style={styles.itemImage}
               />
-              <Text style={styles.itemCost}>{i18n.t("avatars")}</Text>
+              <Text style={styles.itemText}>{i18n.t("avatars")}</Text>
             </TouchableOpacity>
           </Link>
           <Link href="/store/stories" asChild>
-            <TouchableOpacity
-              style={styles.itemContainer}
-              onPress={handleNavigateToStories}
-            >
+            <TouchableOpacity style={styles.itemContainer}>
               <Image
                 source={images.backgroundStories as ImageSourcePropType}
                 style={styles.itemImage}
               />
-              <Text style={styles.itemCost}>{i18n.t("stories")}</Text>
+              <Text style={styles.itemText}>{i18n.t("stories")}</Text>
             </TouchableOpacity>
           </Link>
         </View>
       </View>
-    </View>
+    </ScreenContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f5f5f5",
-  },
   title: {
     fontSize: 24,
     fontWeight: "bold",
@@ -91,26 +79,7 @@ const styles = StyleSheet.create({
     height: 100,
     marginBottom: 10,
   },
-  itemCost: {
-    fontSize: 16,
-  },
-  coinIcon: {
-    width: 20,
-    height: 20,
-    marginLeft: 5,
-    marginBottom: 10,
-  },
-  purchaseButton: {
-    backgroundColor: "#32CD32",
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  disabledButton: {
-    backgroundColor: "#d3d3d3",
-  },
-  purchaseButtonText: {
-    color: "#fff",
+  itemText: {
     fontSize: 16,
   },
 });

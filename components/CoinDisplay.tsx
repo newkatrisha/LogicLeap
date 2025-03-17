@@ -61,9 +61,6 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    position: "absolute",
-    left: 10,
-    top: 40,
   },
   icon: {
     width: 30,

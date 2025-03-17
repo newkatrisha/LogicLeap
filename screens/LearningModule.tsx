@@ -13,7 +13,7 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import * as images from "@/assets/images";
 import { Link, router } from "expo-router";
-import CoinDisplay from "@/components/CoinDisplay";
+import ScreenContainer from "@/components/ScreenContainer";
 // import { customEvent } from 'vexo-analytics'
 
 const LearningModule = () => {
@@ -23,8 +23,7 @@ const LearningModule = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <CoinDisplay />
+    <ScreenContainer>
       <View style={styles.content}>
         <Text style={styles.storiesHeader}>{i18n.t("stories")}</Text>
         <Link href="/home/stories_picker" asChild>
@@ -77,17 +76,11 @@ const LearningModule = () => {
           </TouchableOpacity>
         </View>
       </View>
-    </View>
+    </ScreenContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "space-between",
-    alignItems: "center",
-    backgroundColor: "#f5f5f5",
-  },
   content: {
     flex: 1,
     justifyContent: "center",
@@ -160,11 +153,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: "purple",
     textAlign: "center",
-  },
-  bottomNavigation: {
-    width: "100%",
-    position: "absolute",
-    bottom: 0,
   },
 });
 

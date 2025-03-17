@@ -16,9 +16,9 @@ import i18n from "@/locales/localization";
 import { Audio } from "expo-av";
 import { router, useLocalSearchParams } from "expo-router";
 import * as images from "@/assets/images";
-import CoinDisplay from "@/components/CoinDisplay";
 import { correctSoundFiles, incorrectSoundFiles } from "./constants";
 import LevelUpModal from "@/components/LevelUpModal";
+import ScreenContainer from "@/components/ScreenContainer";
 
 const MathProblems = () => {
   const { type } = useLocalSearchParams<{ type: string }>();
@@ -144,52 +144,55 @@ const MathProblems = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <CoinDisplay />
-      {renderQuestion()}
-      <View style={styles.choicesContainer}>
-        {questions[currentQuestionIndex]?.choices.map((choice, index) => (
-          <TouchableOpacity
-            key={index}
+    <ScreenContainer>
+      <View style={styles.container}>
+        {renderQuestion()}
+        <View style={styles.choicesContainer}>
+          {questions[currentQuestionIndex]?.choices.map((choice, index) => (
+            <TouchableOpacity
+              key={index}
+              style={[
+                styles.choiceButton,
+                selectedAnswer === choice &&
+                  (choice === correctAnswer
+                    ? styles.correctAnswer
+                    : styles.incorrectAnswer),
+              ]}
+              onPress={() => handleAnswerSubmit(choice)}
+              disabled={selectedAnswer !== null}
+            >
+              <Text style={styles.choiceText}>{choice}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+        <Text style={styles.indexText}>{`${currentQuestionIndex + 1}/${
+          questions.length
+        }`}</Text>
+        {feedbackImage && (
+          <Image source={feedbackImage} style={styles.feedbackImage} />
+        )}
+        {feedback && (
+          <Text
             style={[
-              styles.choiceButton,
-              selectedAnswer === choice &&
-                (choice === correctAnswer
-                  ? styles.correctAnswer
-                  : styles.incorrectAnswer),
+              styles.feedback,
+              {
+                color: feedbackImage === images.correctSmile ? "green" : "red",
+              },
             ]}
-            onPress={() => handleAnswerSubmit(choice)}
-            disabled={selectedAnswer !== null}
           >
-            <Text style={styles.choiceText}>{choice}</Text>
-          </TouchableOpacity>
-        ))}
+            {feedback}
+          </Text>
+        )}
+        <LevelUpModal
+          isVisible={modalVisible}
+          onDismiss={() => {
+            setModalVisible(false);
+            router.replace("/home/learning");
+          }}
+          message={modalContent}
+        />
       </View>
-      <Text style={styles.indexText}>{`${currentQuestionIndex + 1}/${
-        questions.length
-      }`}</Text>
-      {feedbackImage && (
-        <Image source={feedbackImage} style={styles.feedbackImage} />
-      )}
-      {feedback && (
-        <Text
-          style={[
-            styles.feedback,
-            { color: feedbackImage === images.correctSmile ? "green" : "red" },
-          ]}
-        >
-          {feedback}
-        </Text>
-      )}
-      <LevelUpModal
-        isVisible={modalVisible}
-        onDismiss={() => {
-          setModalVisible(false);
-          router.replace("/home/learning");
-        }}
-        message={modalContent}
-      />
-    </View>
+    </ScreenContainer>
   );
 };
 

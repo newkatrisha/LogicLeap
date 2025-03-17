@@ -80,13 +80,13 @@ const styles = StyleSheet.create({
 const pickerSelectStyles = StyleSheet.create({
   inputIOS: {
     fontSize: 16,
-    paddingVertical: 12,
-    paddingHorizontal: 10,
+    paddingVertical: 2,
+    paddingHorizontal: 2,
     borderWidth: 1,
     borderColor: "gray",
     borderRadius: 4,
     color: "black",
-    paddingRight: 30,
+    // paddingRight: 30,
     width: 200,
     marginBottom: 20,
   },

@@ -10,9 +10,9 @@ import {
 } from "react-native";
 import { useUser } from "@/contexts/UserContext";
 import i18n from "@/locales/localization";
-import CoinDisplay from "@/components/CoinDisplay";
 import * as images from "@/assets/images";
 import { storiesForSale } from "./constants";
+import ScreenContainer from "@/components/ScreenContainer";
 // import { customEvent } from 'vexo-analytics'
 
 const StoriesScreen = () => {
@@ -77,8 +77,7 @@ const StoriesScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <CoinDisplay />
+    <ScreenContainer>
       {/* <Text style={styles.title}>{i18n.t("buyStories")}</Text> */}
       <FlatList
         data={storiesForSale.filter(
@@ -93,16 +92,11 @@ const StoriesScreen = () => {
         columnWrapperStyle={styles.row}
         showsVerticalScrollIndicator={false}
       />
-    </View>
+    </ScreenContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: "#f5f5f5",
-  },
   title: {
     fontSize: 24,
     fontWeight: "bold",

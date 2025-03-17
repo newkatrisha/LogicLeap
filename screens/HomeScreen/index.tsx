@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -14,14 +14,14 @@ import {
 import { Link } from "expo-router";
 import i18n from "@/locales/localization";
 import { useUser } from "@/contexts/UserContext";
-import CoinDisplay from "@/components/CoinDisplay";
 import { UserContextType } from "@/types/user";
 import { getAvatarSource } from "./constants";
+import ScreenContainer from "@/components/ScreenContainer";
 
 const HomeScreen = () => {
   const { user, updateNickname, updateAvatar } = useUser() as UserContextType;
   const [isEditing, setIsEditing] = useState(false);
-  const [thankYouMessage, setThankYouMessage] = useState("");
+  const [thankYouMessage] = useState("");
   const [nickname, setNickname] = useState(user?.nickname || "");
   const [avatarModalVisible, setAvatarModalVisible] = useState(false);
 
@@ -63,8 +63,7 @@ const HomeScreen = () => {
   );
 
   return (
-    <View style={styles.container}>
-      <CoinDisplay />
+    <ScreenContainer>
       <View style={styles.userInfoSection}>
         <TouchableOpacity onPress={() => setAvatarModalVisible(true)}>
           <Image
@@ -137,18 +136,13 @@ const HomeScreen = () => {
           </View>
         </View>
       </Modal>
-    </View>
+    </ScreenContainer>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    padding: 10,
-  },
   userInfoSection: {
+    flex: 1,
     alignItems: "center",
     justifyContent: "center",
     width: "100%",
