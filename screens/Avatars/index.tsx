@@ -64,7 +64,6 @@ const AvatarsScreen = () => {
 
   return (
     <ScreenContainer>
-      <Text style={styles.title}>{i18n.t("avatars")}</Text>
       <FlatList
         data={itemsForSale.filter(
           (item) => !user?.purchasedItems?.includes(item.id)
@@ -80,12 +79,6 @@ const AvatarsScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-    alignSelf: "center",
-  },
   itemContainer: {
     alignItems: "center",
     justifyContent: "center",

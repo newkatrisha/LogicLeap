@@ -15,7 +15,6 @@ import ScreenContainer from "@/components/ScreenContainer";
 const StoreScreen = () => {
   return (
     <ScreenContainer>
-      <Text style={styles.title}>{i18n.t("store")}</Text>
       <View style={styles.contentContainer}>
         <View style={styles.gridView}>
           <Link href="/store/avatars" asChild>
@@ -43,12 +42,6 @@ const StoreScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginTop: 20,
-    textAlign: "center",
-  },
   contentContainer: {
     flex: 1,
     justifyContent: "center",

@@ -23,7 +23,6 @@ const SettingsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{i18n.t("settings")}</Text>
       <View style={styles.content}>
         <Text style={styles.label}>{i18n.t("selectLanguage")}</Text>
         <Picker
@@ -54,13 +53,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: "#f5f5f5",
     padding: 20,
-  },
-  title: {
-    position: "absolute",
-    top: 50,
-    fontSize: 24,
-    fontWeight: "bold",
-    textAlign: "center",
   },
   content: {
     marginTop: 100,

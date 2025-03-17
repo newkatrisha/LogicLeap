@@ -78,7 +78,6 @@ const StoriesScreen = () => {
 
   return (
     <ScreenContainer>
-      {/* <Text style={styles.title}>{i18n.t("buyStories")}</Text> */}
       <FlatList
         data={storiesForSale.filter(
           (item) =>
@@ -97,11 +96,6 @@ const StoriesScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  title: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 20,
-  },
   row: {
     justifyContent: "space-between",
   },

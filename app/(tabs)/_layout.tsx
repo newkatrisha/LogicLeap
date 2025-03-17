@@ -1,6 +1,7 @@
 import React from "react";
 import { Tabs } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import i18n from "@/locales/localization";
 
 export default function TabsLayout() {
   return (
@@ -47,6 +48,13 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="settings" size={size} color={color} />
           ),
+          headerShown: true,
+          headerTitle: i18n.t("settings"),
+          headerTitleAlign: "center",
+          headerTitleStyle: {
+            fontSize: 24,
+            fontWeight: "bold",
+          },
         }}
       />
     </Tabs>
