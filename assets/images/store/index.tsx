@@ -14,6 +14,3 @@ export { default as avatar13 } from "./avatar13.png";
 export { default as avatar14 } from "./avatar14.png";
 export { default as avatar15 } from "./avatar15.png";
 export { default as avatar16 } from "./avatar16.png";
-export { default as catInJungleStory } from "./catInJungleStory.png";
-export { default as dragonWorldStory } from "./dragonWorldStory.png";
-export { default as vampiresStory } from "./vampiresStory.png";

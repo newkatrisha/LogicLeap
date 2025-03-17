@@ -12,7 +12,7 @@ import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import * as images from "@/assets/images";
-import { router } from "expo-router";
+import { Link, router } from "expo-router";
 import CoinDisplay from "@/components/CoinDisplay";
 // import { customEvent } from 'vexo-analytics'
 
@@ -27,21 +27,24 @@ const LearningModule = () => {
       <CoinDisplay />
       <View style={styles.content}>
         <Text style={styles.storiesHeader}>{i18n.t("stories")}</Text>
-        <TouchableOpacity
-          style={styles.storiesButton}
-          onPress={() => {
-            console.log("Stories");
-            // navigation.navigate("Stories");
-          }}
-        >
-          <ImageBackground
-            source={images.backgroundStories as ImageSourcePropType}
-            style={styles.storiesButtonBackground}
-            imageStyle={styles.imageStyle}
+        <Link href="/home/stories_picker" asChild>
+          <TouchableOpacity
+            style={styles.storiesButton}
+            onPress={() => {
+              console.log("Stories");
+            }}
           >
-            <Text style={styles.storiesButtonText}>{i18n.t("startStory")}</Text>
-          </ImageBackground>
-        </TouchableOpacity>
+            <ImageBackground
+              source={images.backgroundStories as ImageSourcePropType}
+              style={styles.storiesButtonBackground}
+              imageStyle={styles.imageStyle}
+            >
+              <Text style={styles.storiesButtonText}>
+                {i18n.t("startStory")}
+              </Text>
+            </ImageBackground>
+          </TouchableOpacity>
+        </Link>
         <Text style={styles.header}>{i18n.t("chooseMathCategory")}:</Text>
         <View style={styles.gridContainer}>
           <TouchableOpacity

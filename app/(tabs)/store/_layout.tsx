@@ -8,6 +8,10 @@ export default function StoreLayout() {
         name="avatars"
         options={{ headerShown: true, headerTitle: "" }}
       />
+      <Stack.Screen
+        name="stories"
+        options={{ headerShown: true, headerTitle: "" }}
+      />
     </Stack>
   );
 }

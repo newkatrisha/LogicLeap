@@ -32,16 +32,18 @@ const StoreScreen = () => {
               <Text style={styles.itemCost}>{i18n.t("avatars")}</Text>
             </TouchableOpacity>
           </Link>
-          <TouchableOpacity
-            style={styles.itemContainer}
-            onPress={handleNavigateToStories}
-          >
-            <Image
-              source={images.backgroundStories as ImageSourcePropType}
-              style={styles.itemImage}
-            />
-            <Text style={styles.itemCost}>{i18n.t("stories")}</Text>
-          </TouchableOpacity>
+          <Link href="/store/stories" asChild>
+            <TouchableOpacity
+              style={styles.itemContainer}
+              onPress={handleNavigateToStories}
+            >
+              <Image
+                source={images.backgroundStories as ImageSourcePropType}
+                style={styles.itemImage}
+              />
+              <Text style={styles.itemCost}>{i18n.t("stories")}</Text>
+            </TouchableOpacity>
+          </Link>
         </View>
       </View>
     </View>

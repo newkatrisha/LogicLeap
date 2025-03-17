@@ -7,7 +7,7 @@ export interface User {
   age?: number;
   nickname?: string;
   purchasedItems?: string[];
-  purchasedStories?: { id: number; name: string }[];
+  purchasedStories?: { id: string; name: string }[];
   avatar?: string;
   scores?: Record<string, number>;
   testCompleted?: boolean;
@@ -27,7 +27,7 @@ export interface UserContextType {
   testCompleted: boolean;
   updateScores: (operation: string) => void;
   updateProfile: (updates: {
-    purchasedItems?: string[];
+    purchasedStories?: { id: string; name: string; cost?: number }[];
     coins?: number;
   }) => void;
 }
