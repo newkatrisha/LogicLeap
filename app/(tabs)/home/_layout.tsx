@@ -24,6 +24,10 @@ export default function HomeLayout() {
         name="stories_picker"
         options={{ headerShown: true, headerTitle: "" }}
       />
+      <Stack.Screen
+        name="story/[name]"
+        options={{ headerShown: true, headerTitle: "" }}
+      />
     </Stack>
   );
 }

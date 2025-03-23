@@ -10,6 +10,7 @@ import { Picker } from "@react-native-picker/picker";
 import i18n from "@/locales/localization";
 import { useUser } from "@/contexts/UserContext";
 import ScreenContainer from "@/components/ScreenContainer";
+import { router } from "expo-router";
 // import { customEvent } from 'vexo-analytics';
 
 const StoriesPicker = () => {
@@ -24,7 +25,7 @@ const StoriesPicker = () => {
     );
     console.log("Starting story:", story?.name);
     // customEvent("story started", { story: story?.name });
-    // navigation.navigate('StoryPage', { story_name: story?.name });
+    router.push(`/home/story/${story?.name}`);
   };
 
   return (
