@@ -1,9 +1,11 @@
 import React from "react";
-import { Tabs } from "expo-router";
+import { Tabs, useRouter } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import i18n from "@/locales/localization";
 
 export default function TabsLayout() {
+  const router = useRouter();
+
   return (
     <Tabs
       screenOptions={{
@@ -31,6 +33,12 @@ export default function TabsLayout() {
             <Ionicons name="home" size={size} color={color} />
           ),
         }}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            router.replace("/home");
+          },
+        }}
       />
       <Tabs.Screen
         name="store"
@@ -39,6 +47,12 @@ export default function TabsLayout() {
           tabBarIcon: ({ color, size }) => (
             <Ionicons name="cart" size={size} color={color} />
           ),
+        }}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            router.replace("/store");
+          },
         }}
       />
       <Tabs.Screen
@@ -54,6 +68,12 @@ export default function TabsLayout() {
           headerTitleStyle: {
             fontSize: 24,
             fontWeight: "bold",
+          },
+        }}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            router.replace("/settings");
           },
         }}
       />

@@ -8,62 +8,89 @@ import i18n from "@/locales/localization";
 import { router, useLocalSearchParams } from "expo-router";
 import config from "@/config";
 
+// Define state types
+interface StoryContent {
+  question: string | null;
+  imageUrls: string[];
+  endOfStory: boolean;
+}
+
+interface MediaState {
+  sound: Audio.Sound | null;
+  audioDuration: number;
+  currentImageIndex: number;
+  audioUrl: string;
+}
+
 const Story = () => {
   const { name, isContinuing } = useLocalSearchParams();
   const { user } = useUser();
-  const [question, setQuestion] = useState(null);
-  const [imageUrls, setImageUrls] = useState([]);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [sound, setSound] = useState(null);
+
+  // Group API/content-related states
+  const [storyContent, setStoryContent] = useState<StoryContent>({
+    question: null,
+    imageUrls: [],
+    endOfStory: false,
+  });
+
+  // Group media player related states
+  const [mediaState, setMediaState] = useState<MediaState>({
+    sound: null,
+    audioDuration: 0,
+    currentImageIndex: 0,
+    audioUrl: "",
+  });
+
+  // Keep loading as a separate state since it's UI-specific
   const [loading, setLoading] = useState(true);
-  const [nextUrl, setNextUrl] = useState(null);
-  const [endOfStory, setEndOfStory] = useState(false);
-  const [audioDuration, setAudioDuration] = useState(0);
-  const intervalRef = useRef(null);
+
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
   const baseUrl = config.API_HOST;
 
-  const fetchStory = async (endpoint) => {
-    console.log(`${isContinuing ? "Continuing" : "Starting"} story with:`, {
-      name,
-      age: user.age,
-      user_id: user.uid,
-    });
-
+  const fetchStory = async (endpoint: string) => {
     try {
       const url = `${baseUrl}/${endpoint}`;
       const payload = isContinuing
-        ? { user_id: user.uid }
+        ? { user_id: user?.uid }
         : {
             story_name: name,
-            age: user.age,
-            user_id: user.uid,
+            age: user?.age,
+            user_id: user?.uid,
             language: i18n.locale,
           };
 
-      const response = await api.post(url, payload, { timeout: 10000 }); // 10 seconds timeout
+      const response = await api.post(url, payload, { timeout: 10000 });
 
-      setQuestion(response.data.question);
       const imageUrlsWithCacheBusting = response.data.imageUrls.map(
-        (url) => `${baseUrl}${url}?cb=${new Date().getTime()}`
+        (url: string) => `${baseUrl}${url}?cb=${new Date().getTime()}`
       );
-      setImageUrls(imageUrlsWithCacheBusting);
-      setCurrentImageIndex(0); // Reset the current image index
-      setLoading(false);
-      setEndOfStory(response.data.end_of_story);
 
-      // Preload images
-      imageUrlsWithCacheBusting.forEach((url) => {
-        Image.prefetch(url);
+      // Update story content state
+      setStoryContent({
+        question: response.data.question,
+        imageUrls: imageUrlsWithCacheBusting,
+        endOfStory: response.data.end_of_story,
       });
 
-      if (response.data.audioUrl) {
-        setNextUrl(baseUrl + response.data.audioUrl);
-      }
-    } catch (error) {
-      console.error(
-        `Error ${isContinuing ? "continuing" : "starting"} story:`,
-        error.message
-      );
+      // Update media state - reset image index
+      setMediaState((prev) => ({
+        ...prev,
+        currentImageIndex: 0,
+        audioUrl: response.data.audioUrl
+          ? `${baseUrl}${response.data.audioUrl}`
+          : "",
+      }));
+
+      setLoading(false);
+
+      // Preload images
+      imageUrlsWithCacheBusting.forEach((url: string) => {
+        Image.prefetch(url);
+      });
+    } catch (error: unknown) {
+      const errorMessage =
+        error instanceof Error ? error.message : "Unknown error";
+      console.error("Error fetching story:", errorMessage);
       Alert.alert(i18n.t("error"), i18n.t("unable_to_start_story"));
       setLoading(false);
     }
@@ -78,13 +105,12 @@ const Story = () => {
   }, [name, isContinuing]);
 
   useEffect(() => {
-    if (nextUrl) {
-      console.log("nextUrl", nextUrl);
-      handlePlayAudio(nextUrl);
+    if (mediaState.audioUrl) {
+      handlePlayAudio(mediaState.audioUrl);
     }
-  }, [nextUrl]);
+  }, [mediaState.audioUrl]);
 
-  const handlePlayAudio = async (url) => {
+  const handlePlayAudio = async (url: string) => {
     if (url) {
       try {
         const { sound: newSound } = await Audio.Sound.createAsync(
@@ -92,22 +118,32 @@ const Story = () => {
           { shouldPlay: true }
         );
         const status = await newSound.getStatusAsync();
-        const duration = status.durationMillis || 0;
-        setAudioDuration(duration);
+        const duration = status.isLoaded ? status.durationMillis || 0 : 0;
+
+        // Update media state
+        setMediaState((prev) => ({
+          ...prev,
+          sound: newSound,
+          audioDuration: duration,
+        }));
 
         newSound.setOnPlaybackStatusUpdate((status) => {
-          if (status.didJustFinish) {
+          if (status.isLoaded && status.didJustFinish) {
             handleNextQuestion();
           }
         });
-        setSound(newSound);
-      } catch (error) {
-        console.error("Error playing audio:", error.message);
+      } catch (error: unknown) {
+        const errorMessage =
+          error instanceof Error ? error.message : "Unknown error";
+        console.error("Error playing audio:", errorMessage);
       }
     }
   };
 
   useEffect(() => {
+    const { imageUrls } = storyContent;
+    const { audioDuration } = mediaState;
+
     if (imageUrls.length > 1 && audioDuration > 0) {
       // Clear existing interval
       if (intervalRef.current) {
@@ -119,13 +155,15 @@ const Story = () => {
 
       // Set new interval
       intervalRef.current = setInterval(() => {
-        setCurrentImageIndex((prevIndex) => {
-          const nextIndex = prevIndex + 1;
+        setMediaState((prev) => {
+          const nextIndex = prev.currentImageIndex + 1;
           if (nextIndex < imageUrls.length) {
-            return nextIndex;
+            return { ...prev, currentImageIndex: nextIndex };
           } else {
-            clearInterval(intervalRef.current);
-            return prevIndex;
+            if (intervalRef.current) {
+              clearInterval(intervalRef.current);
+            }
+            return prev;
           }
         });
       }, interval); // Switch image based on calculated interval
@@ -136,19 +174,19 @@ const Story = () => {
         clearInterval(intervalRef.current);
       }
     };
-  }, [imageUrls, audioDuration]);
+  }, [storyContent.imageUrls, mediaState.audioDuration]);
 
   useEffect(() => {
     return () => {
-      if (sound) {
+      if (mediaState.sound) {
         console.log("Unloading sound");
-        sound.unloadAsync();
+        mediaState.sound.unloadAsync();
       }
     };
-  }, [sound]);
+  }, [mediaState.sound]);
 
   const handleNextQuestion = () => {
-    if (endOfStory) {
+    if (storyContent.endOfStory) {
       //   customEvent("story ended", { story: story_name });
       Alert.alert(
         i18n.t("end_of_story"),
@@ -157,14 +195,18 @@ const Story = () => {
       );
       return;
     }
-    if (question) {
-      setSound(null); // Clear the previous sound
-      console.log("Navigating to StoryMathProblem");
-      //   navigation.navigate("StoryMathProblem", {
-      //     question,
-      //     story_name,
-      //     isContinuing: true,
-      //   });
+    if (storyContent.question) {
+      // Reset sound
+      setMediaState((prev) => ({ ...prev, sound: null }));
+
+      // Properly encode the question as JSON string and then URI encode for URL
+      const encodedQuestion = encodeURIComponent(
+        JSON.stringify(storyContent.question)
+      );
+
+      router.push(
+        `/home/story/math-problem?question=${encodedQuestion}&story_name=${name}&isContinuing=${isContinuing}`
+      );
     } else {
       console.error("Question is null");
       Alert.alert(
@@ -174,19 +216,7 @@ const Story = () => {
     }
   };
 
-  //   useEffect(() => {
-  //     const unsubscribe = navigation.addListener("focus", () => {
-  //       if (isContinuing) {
-  //         console.log("Continuing story");
-  //         fetchStory("continue-story");
-  //       }
-  //     });
-
-  //     return unsubscribe;
-  //   }, [navigation, story_name, isContinuing]);
-
   if (loading) {
-    // TODO: Add a loading spinner
     return (
       <View style={styles.container}>
         <Text style={styles.loadingText}>
@@ -198,12 +228,12 @@ const Story = () => {
 
   return (
     <View style={styles.container}>
-      {imageUrls.length > 0 && (
+      {storyContent.imageUrls.length > 0 ? (
         <Image
-          source={{ uri: imageUrls[currentImageIndex] }}
+          source={{ uri: storyContent.imageUrls[mediaState.currentImageIndex] }}
           style={styles.backgroundImage}
         />
-      )}
+      ) : null}
     </View>
   );
 };
