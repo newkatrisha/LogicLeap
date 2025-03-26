@@ -28,6 +28,10 @@ export default function HomeLayout() {
         name="story/[name]"
         options={{ headerShown: true, headerTitle: "" }}
       />
+      <Stack.Screen
+        name="story/math-problem"
+        options={{ headerShown: true, headerTitle: "" }}
+      />
     </Stack>
   );
 }
